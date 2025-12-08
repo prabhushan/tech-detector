@@ -1,0 +1,17 @@
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\spi\DetectorPlugin.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\lang\TerraformDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\runtime\JdkVersionDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\engine\DetectorService.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\engine\PluginEngine.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\web\ScanController.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\framework\PythonRequirementsDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\config\RegistryLoader.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\TechDetectorApplication.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\runtime\DockerfileRuntimeDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\model\DetectionResult.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\lang\JavaDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\framework\SpringFrameworkDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\lang\PythonDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\framework\PackageJsonDetector.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\cli\CliRunner.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\sbom\CycloneDxDetector.java

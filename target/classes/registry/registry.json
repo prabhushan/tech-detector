@@ -1,0 +1,32 @@
+{
+  "frameworks": {
+    "spring": {
+      "indicators": ["org.springframework", "spring-boot-starter", "springframework"],
+      "pomArtifacts": ["org.springframework.boot", "org.springframework"]
+    },
+    "django": {
+      "indicators": ["django"]
+    },
+    "flask": {
+      "indicators": ["flask"]
+    }
+  },
+  "cloud_sdks": {
+    "aws": { "indicators": ["boto3", "software.amazon.awssdk", "aws-java-sdk"] },
+    "gcp": { "indicators": ["com.google.cloud", "google-cloud"] },
+    "azure": { "indicators": ["com.azure", "azure-storage"] }
+  },
+  "databases": {
+    "postgresql": { "indicators": ["org.postgresql", "jdbc:postgresql"] },
+    "mysql": { "indicators": ["mysql", "jdbc:mysql"] },
+    "mongodb": { "indicators": ["org.mongodb", "pymongo", "mongodb://"] }
+  },
+  "containers": {
+    "docker": { "files": ["Dockerfile"], "indicators": ["FROM "] }
+  },
+  "runtimes": {
+    "jdk": { "pomKeys": ["java.version", "maven.compiler.source", "maven.compiler.target"], "dockerImagePrefixes": ["openjdk", "eclipse-temurin", "amazoncorretto"] },
+    "python": { "files": ["pyproject.toml", "runtime.txt", "requirements.txt"], "dockerImagePrefixes": ["python"] },
+    "node": { "files": ["package.json", ".nvmrc"], "dockerImagePrefixes": ["node"] }
+  }
+}
