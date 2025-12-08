@@ -9,24 +9,63 @@
     },
     "flask": {
       "indicators": ["flask"]
+    },
+    "fastapi": {
+      "indicators": ["fastapi", "uvicorn"]
+    },
+    "langchain": {
+      "indicators": ["langchain"]
     }
   },
   "cloud_sdks": {
-    "aws": { "indicators": ["boto3", "software.amazon.awssdk", "aws-java-sdk"] },
-    "gcp": { "indicators": ["com.google.cloud", "google-cloud"] },
-    "azure": { "indicators": ["com.azure", "azure-storage"] }
+    "aws": {
+      "indicators": ["boto3", "software.amazon.awssdk", "aws-java-sdk"]
+    },
+    "gcp": {
+      "indicators": ["com.google.cloud", "google-cloud"]
+    },
+    "azure": {
+      "indicators": ["com.azure", "azure-"]
+    },
+    "openai": {
+      "indicators": ["openai"]
+    }
   },
   "databases": {
-    "postgresql": { "indicators": ["org.postgresql", "jdbc:postgresql"] },
-    "mysql": { "indicators": ["mysql", "jdbc:mysql"] },
-    "mongodb": { "indicators": ["org.mongodb", "pymongo", "mongodb://"] }
+    "postgresql": {
+      "indicators": ["org.postgresql", "jdbc:postgresql", "psycopg2"]
+    },
+    "mysql": {
+      "indicators": ["mysql", "jdbc:mysql", "pymysql"]
+    },
+    "mongodb": {
+      "indicators": ["org.mongodb", "pymongo", "mongodb://"]
+    },
+    "redis": {
+      "indicators": ["redis"]
+    },
+    "faiss": {
+      "indicators": ["faiss-cpu", "faiss-gpu"]
+    }
   },
   "containers": {
-    "docker": { "files": ["Dockerfile"], "indicators": ["FROM "] }
+    "docker": {
+      "files": ["Dockerfile"],
+      "indicators": ["FROM "]
+    }
   },
   "runtimes": {
-    "jdk": { "pomKeys": ["java.version", "maven.compiler.source", "maven.compiler.target"], "dockerImagePrefixes": ["openjdk", "eclipse-temurin", "amazoncorretto"] },
-    "python": { "files": ["pyproject.toml", "runtime.txt", "requirements.txt"], "dockerImagePrefixes": ["python"] },
-    "node": { "files": ["package.json", ".nvmrc"], "dockerImagePrefixes": ["node"] }
+    "jdk": {
+      "pomKeys": ["java.version", "maven.compiler.source", "maven.compiler.target"],
+      "dockerImagePrefixes": ["openjdk", "eclipse-temurin", "amazoncorretto"]
+    },
+    "python": {
+      "files": ["pyproject.toml", "runtime.txt", "requirements.txt"],
+      "dockerImagePrefixes": ["python"]
+    },
+    "node": {
+      "files": ["package.json", ".nvmrc"],
+      "dockerImagePrefixes": ["node"]
+    }
   }
 }
