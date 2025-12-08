@@ -32,41 +32,40 @@ public class PythonRequirementsDetector implements DetectorPlugin {
 
         try {
             String content = Files.readString(file, StandardCharsets.UTF_8);
-            String lowerContent = content.toLowerCase();
             JsonNode registry = registryLoader.getRegistry();
 
             // Detect frameworks
-            detectFromRegistry(registry, "frameworks", lowerContent, file, result::addFramework);
+            detectFromRegistry(registry, "frameworks", content, file, result::addFramework);
 
             // Detect cloud SDKs
-            detectFromRegistry(registry, "cloud_sdks", lowerContent, file, result::addCloudSdk);
+            detectFromRegistry(registry, "cloud_sdks", content, file, result::addCloudSdk);
 
             // Detect databases
-            detectFromRegistry(registry, "databases", lowerContent, file, result::addDatabase);
+            detectFromRegistry(registry, "databases", content, file, result::addDatabase);
 
             // Detect AI/ML libraries
             if (registry.has("ai_ml")) {
-                detectFromRegistry(registry, "ai_ml", lowerContent, file, result::addFramework);
+                detectFromRegistry(registry, "ai_ml", content, file, result::addFramework);
             }
 
             // Detect vector databases
             if (registry.has("vector_databases")) {
-                detectFromRegistry(registry, "vector_databases", lowerContent, file, result::addDatabase);
+                detectFromRegistry(registry, "vector_databases", content, file, result::addDatabase);
             }
 
             // Detect testing frameworks
             if (registry.has("testing")) {
-                detectFromRegistry(registry, "testing", lowerContent, file, result::addFramework);
+                detectFromRegistry(registry, "testing", content, file, result::addFramework);
             }
 
             // Detect ORMs
             if (registry.has("orm")) {
-                detectFromRegistry(registry, "orm", lowerContent, file, result::addFramework);
+                detectFromRegistry(registry, "orm", content, file, result::addFramework);
             }
 
             // Detect message queues
             if (registry.has("message_queue")) {
-                detectFromRegistry(registry, "message_queue", lowerContent, file, result::addInfrastructure);
+                detectFromRegistry(registry, "message_queue", content, file, result::addInfrastructure);
             }
 
         } catch (Exception ex) {
@@ -88,14 +87,37 @@ public class PythonRequirementsDetector implements DetectorPlugin {
                 JsonNode indicators = techNode.get("indicators");
                 for (JsonNode indicator : indicators) {
                     String indicatorStr = indicator.asText().toLowerCase();
-                    if (content.contains(indicatorStr)) {
-                        String evidence = file.getFileName().toString() + " contains: " + indicatorStr;
-                        adder.add(formatTechName(tech), evidence);
+                    String version = extractVersion(content, indicatorStr);
+                    if (version != null) {
+                        adder.add(formatTechName(tech), version);
                         break; // Only add once per technology
                     }
                 }
             }
         }
+    }
+
+    private String extractVersion(String content, String packageName) {
+        // Split content into lines
+        String[] lines = content.split("\\r?\\n");
+
+        for (String line : lines) {
+            String trimmed = line.trim();
+            String lowerLine = trimmed.toLowerCase();
+
+            // Skip comments
+            if (lowerLine.startsWith("#")) continue;
+
+            // Check if line contains the package
+            if (lowerLine.startsWith(packageName)) {
+                // Extract version using regex
+                // Matches: package==1.0.0, package>=1.0.0, package~=1.0.0, etc.
+                if (trimmed.matches("(?i)" + packageName + "[>=<~!]*.*")) {
+                    return trimmed; // Return the full line with version
+                }
+            }
+        }
+        return null;
     }
 
     private String formatTechName(String tech) {

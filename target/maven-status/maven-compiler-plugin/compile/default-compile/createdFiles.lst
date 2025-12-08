@@ -8,6 +8,7 @@ com\example\detector\detectors\lang\TerraformDetector.class
 com\example\detector\engine\DetectorService.class
 com\example\detector\web\ScanController.class
 com\example\detector\cli\CliRunner.class
+com\example\detector\detectors\framework\MavenPomDetector.class
 com\example\detector\detectors\lang\JavaDetector.class
 com\example\detector\engine\PluginEngine.class
 com\example\detector\spi\DetectorPlugin.class
@@ -16,3 +17,4 @@ com\example\detector\model\DetectionResult.class
 com\example\detector\detectors\framework\SpringFrameworkDetector.class
 com\example\detector\detectors\runtime\DockerfileRuntimeDetector.class
 com\example\detector\detectors\sbom\CycloneDxDetector.class
+com\example\detector\detectors\framework\MavenPomDetector$ResultAdder.class

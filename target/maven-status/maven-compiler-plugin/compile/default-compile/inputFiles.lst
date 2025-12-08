@@ -6,6 +6,7 @@ C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\en
 C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\web\ScanController.java
 C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\framework\PythonRequirementsDetector.java
 C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\config\RegistryLoader.java
+C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\framework\MavenPomDetector.java
 C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\TechDetectorApplication.java
 C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\detectors\runtime\DockerfileRuntimeDetector.java
 C:\Users\dell\Downloads\test\tech-detector\src\main\java\com\example\detector\model\DetectionResult.java
