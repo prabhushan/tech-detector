@@ -1,71 +1,162 @@
 {
-  "frameworks": {
-    "spring": {
-      "indicators": ["org.springframework", "spring-boot-starter", "springframework"],
-      "pomArtifacts": ["org.springframework.boot", "org.springframework"]
-    },
-    "django": {
-      "indicators": ["django"]
-    },
-    "flask": {
-      "indicators": ["flask"]
-    },
-    "fastapi": {
-      "indicators": ["fastapi", "uvicorn"]
-    },
-    "langchain": {
-      "indicators": ["langchain"]
-    }
-  },
-  "cloud_sdks": {
-    "aws": {
-      "indicators": ["boto3", "software.amazon.awssdk", "aws-java-sdk"]
-    },
-    "gcp": {
-      "indicators": ["com.google.cloud", "google-cloud"]
-    },
-    "azure": {
-      "indicators": ["com.azure", "azure-"]
-    },
-    "openai": {
-      "indicators": ["openai"]
-    }
-  },
-  "databases": {
-    "postgresql": {
-      "indicators": ["org.postgresql", "jdbc:postgresql", "psycopg2"]
-    },
-    "mysql": {
-      "indicators": ["mysql", "jdbc:mysql", "pymysql"]
-    },
-    "mongodb": {
-      "indicators": ["org.mongodb", "pymongo", "mongodb://"]
-    },
-    "redis": {
-      "indicators": ["redis"]
-    },
-    "faiss": {
-      "indicators": ["faiss-cpu", "faiss-gpu"]
-    }
-  },
-  "containers": {
-    "docker": {
-      "files": ["Dockerfile"],
-      "indicators": ["FROM "]
-    }
-  },
-  "runtimes": {
-    "jdk": {
-      "pomKeys": ["java.version", "maven.compiler.source", "maven.compiler.target"],
-      "dockerImagePrefixes": ["openjdk", "eclipse-temurin", "amazoncorretto"]
+  "languages": {
+    "java": {
+      "extensions": [".java", ".jar", ".war"],
+      "keywords": ["public class", "import java.", "javax."],
+      "sbomMatch": ["maven", "gradle", "org.springframework", "com.fasterxml.jackson"]
     },
     "python": {
-      "files": ["pyproject.toml", "runtime.txt", "requirements.txt"],
-      "dockerImagePrefixes": ["python"]
+      "extensions": [".py"],
+      "files": ["requirements.txt", "pyproject.toml"],
+      "keywords": ["import ", "def ", "print("],
+      "sbomMatch": ["pypi", "pip", "cpython"]
     },
-    "node": {
-      "files": ["package.json", ".nvmrc"],
-      "dockerImagePrefixes": ["node"]
+    "javascript": {
+      "extensions": [".js", ".jsx", ".mjs"],
+      "files": ["package.json"],
+      "keywords": ["require(", "import ", "export "],
+      "sbomMatch": ["npm", "node", "yarn"]
+    },
+    "typescript": {
+      "extensions": [".ts", ".tsx"],
+      "files": ["package.json"],
+      "sbomMatch": ["@types/", "typescript"]
+    },
+    "go": {
+      "extensions": [".go"],
+      "files": ["go.mod", "go.sum"],
+      "sbomMatch": ["golang", "go."]
+    },
+    "ruby": {
+      "extensions": [".rb"],
+      "files": ["Gemfile", "Gemfile.lock"],
+      "sbomMatch": ["rubygems"]
+    }
+  },
+
+  "frameworks": {
+    "spring": {
+      "keywords": ["@SpringBootApplication", "org.springframework"],
+      "sbomMatch": ["org.springframework.boot"]
+    },
+    "django": {
+      "keywords": ["django.", "from django"],
+      "files": ["manage.py"],
+      "sbomMatch": ["django"]
+    },
+    "flask": {
+      "keywords": ["from flask import"],
+      "sbomMatch": ["flask"]
+    },
+    "express": {
+      "files": ["app.js", "server.js"],
+      "keywords": ["express()"],
+      "sbomMatch": ["express"]
+    },
+    "fastapi": {
+      "keywords": ["from fastapi"],
+      "sbomMatch": ["fastapi"]
+    }
+  },
+
+  "runtimes": {
+    "jre": {
+      "sbomMatch": ["temurin", "openjdk", "oraclejdk", "corretto"],
+      "dockerBaseImages": ["openjdk", "eclipse-temurin", "corretto"]
+    },
+    "python-runtime": {
+      "sbomMatch": ["cpython"],
+      "dockerBaseImages": ["python:"]
+    },
+    "node-runtime": {
+      "sbomMatch": ["nodejs"],
+      "dockerBaseImages": ["node:"]
+    }
+  },
+
+  "cloudSdks": {
+    "aws": {
+      "sbomMatch": ["software.amazon", "boto3", "aws-sdk"],
+      "keywords": ["AWSAccessKey", "AmazonS3", "boto3"]
+    },
+    "azure": {
+      "sbomMatch": ["azure-core", "com.azure"],
+      "keywords": ["AzureKey", "AzureBlobClient"]
+    },
+    "gcp": {
+      "sbomMatch": ["google-cloud", "gcp"],
+      "keywords": ["GoogleCredentials", "google.cloud"]
+    }
+  },
+
+  "databases": {
+    "postgres": {
+      "sbomMatch": ["postgresql", "org.postgresql"],
+      "keywords": ["jdbc:postgresql://", "psql"]
+    },
+    "mysql": {
+      "sbomMatch": ["mysql:mysql"],
+      "keywords": ["jdbc:mysql://"]
+    },
+    "mongodb": {
+      "sbomMatch": ["mongodb", "mongo-java-driver"],
+      "keywords": ["mongodb://"]
+    },
+    "redis": {
+      "sbomMatch": ["redis", "lettuce", "jedis"],
+      "keywords": ["redis://"]
+    }
+  },
+
+  "containers": {
+    "docker": {
+      "files": ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"],
+      "sbomMatch": [],
+      "keywords": ["FROM ", "RUN ", "CMD ", "ENTRYPOINT"]
+    },
+    "kubernetes": {
+      "files": ["deployment.yaml", "deployment.yml", "k8s.yml"],
+      "keywords": ["apiVersion", "kind:", "metadata:"]
+    }
+  },
+
+  "buildTools": {
+    "maven": {
+      "files": ["pom.xml"],
+      "sbomMatch": ["maven"],
+      "keywords": ["<project>", "<dependencies>"]
+    },
+    "gradle": {
+      "files": ["build.gradle", "build.gradle.kts"],
+      "sbomMatch": ["gradle"],
+      "keywords": ["plugins {", "dependencies {"]
+    },
+    "pip": {
+      "files": ["requirements.txt"],
+      "sbomMatch": ["pypi"]
+    },
+    "npm": {
+      "files": ["package.json"],
+      "sbomMatch": ["npm"]
+    },
+    "go-mod": {
+      "files": ["go.mod"],
+      "sbomMatch": ["gomod"]
+    }
+  },
+
+  "osDistros": {
+    "alpine": {
+      "dockerBaseImages": ["alpine"],
+      "keywords": ["apk add"]
+    },
+    "ubuntu": {
+      "dockerBaseImages": ["ubuntu"],
+      "keywords": ["apt-get", "apt install"]
+    },
+    "redhat": {
+      "dockerBaseImages": ["redhat", "ubi"],
+      "keywords": ["yum install", "dnf install"]
     }
   }
 }
