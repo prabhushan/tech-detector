@@ -85,6 +85,9 @@ public class SbomFirstDetectorEngine {
 
         log.debug("Scan completed - Languages: {}, Frameworks: {}, Runtimes: {}, Infrastructure: {}", 
                  result.languages.size(), result.frameworks.size(), result.runtimes.size(), result.infrastructure.size());
+        
+        result.populateFinalResult();
+        
         return result;
     }
 
