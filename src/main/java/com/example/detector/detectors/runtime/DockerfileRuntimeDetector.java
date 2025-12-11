@@ -19,27 +19,36 @@ public class DockerfileRuntimeDetector implements DetectorPlugin {
     @Override
     public void inspect(Path file, Path projectRoot, DetectionResult result) {
         String name = file.getFileName().toString().toLowerCase();
-        if (!name.startsWith("dockerfile")) return;
+        if (!name.startsWith("dockerfile")) {
+            log.trace("Skipping file (not a Dockerfile): {}", file.getFileName());
+            return;
+        }
         
-        log.debug("Processing Dockerfile: {}", file);
+        log.info("DockerfileRuntimeDetector: Processing Dockerfile: {}", file);
         try {
             String txt = Files.readString(file, StandardCharsets.UTF_8);
             Matcher m = FROM.matcher(txt);
             if (m.find()) {
                 String base = m.group(1);
                 String lower = base.toLowerCase();
+                log.info("DockerfileRuntimeDetector: Found FROM base image: {}", base);
                 if (lower.contains("openjdk") || lower.contains("temurin") || lower.contains("corretto")) {
                     result.addRuntime("JDK", "Docker base: " + base);
+                    log.info("DockerfileRuntimeDetector: Detected JDK runtime from Docker base: {}", base);
                 } else if (lower.startsWith("python")) {
                     result.addRuntime("Python", "Docker base: " + base);
+                    log.info("DockerfileRuntimeDetector: Detected Python runtime from Docker base: {}", base);
                 } else if (lower.startsWith("node")) {
                     result.addRuntime("Node", "Docker base: " + base);
+                    log.info("DockerfileRuntimeDetector: Detected Node runtime from Docker base: {}", base);
                 }
                 result.addInfrastructure("Docker", file.toString());
-                log.debug("Detected Docker infrastructure and runtime from: {}", file);
+                log.info("DockerfileRuntimeDetector: Detected Docker infrastructure from: {}", file);
+            } else {
+                log.debug("DockerfileRuntimeDetector: No FROM instruction found in: {}", file);
             }
         } catch (Exception e) {
-            log.debug("Error processing Dockerfile {}: {}", file, e.getMessage());
+            log.warn("DockerfileRuntimeDetector: Error processing Dockerfile {}: {}", file, e.getMessage(), e);
         }
     }
 }

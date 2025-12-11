@@ -46,25 +46,34 @@ public class SbomProcessor {
                     }
                     lang.ifPresent(result.languages::add);
 
+                    // Extract version from component or PURL
+                    String effectiveVersion = version;
+                    if ((effectiveVersion == null || effectiveVersion.isBlank()) && purl != null) {
+                        effectiveVersion = extractVersionFromPurl(purl);
+                    }
+
                     // 2) Framework detection (matchFrameworks handles sbomMatch and keywords)
                     List<String> frameworks = matcher.matchFrameworks(name == null ? "" : name, purl);
                     for (String fw : frameworks) {
+                        String frameworkKey = appendVersionIfAvailable(fw, effectiveVersion);
                         String evidence = buildEvidence(name, version, purl);
-                        result.addFramework(fw, evidence);
+                        result.addFramework(frameworkKey, evidence);
                     }
 
                     // 3) Cloud SDKs
                     List<String> clouds = matcher.matchCloudSdks(name == null ? "" : name, purl);
                     for (String cl : clouds) {
+                        String cloudKey = appendVersionIfAvailable(cl, effectiveVersion);
                         String evidence = buildEvidence(name, version, purl);
-                        result.addCloudSdk(cl, evidence);
+                        result.addCloudSdk(cloudKey, evidence);
                     }
 
                     // 4) Databases
                     List<String> dbs = matcher.matchDatabases(name == null ? "" : name, purl);
                     for (String db : dbs) {
+                        String dbKey = appendVersionIfAvailable(db, effectiveVersion);
                         String evidence = buildEvidence(name, version, purl);
-                        result.addDatabase(db, evidence);
+                        result.addDatabase(dbKey, evidence);
                     }
 
                     // 5) Containers (CycloneDX may mark components type=container)
@@ -73,16 +82,7 @@ public class SbomProcessor {
                     }
 
                     // 6) Runtime heuristics from purl (simple)
-                    if (purl != null) {
-                        String plower = purl.toLowerCase();
-                        if (plower.contains("openjdk") || plower.contains("jdk") || plower.contains("temurin") || plower.contains("corretto")) {
-                            result.addRuntime("JDK", buildEvidence(name, version, purl));
-                        } else if (plower.startsWith("pkg:pypi") || plower.contains("python")) {
-                            result.addRuntime("Python", buildEvidence(name, version, purl));
-                        } else if (plower.startsWith("pkg:npm") || plower.contains("node")) {
-                            result.addRuntime("Node", buildEvidence(name, version, purl));
-                        }
-                    }
+                    
                 } catch (Exception ex) {
                     // defensive per-component; continue
                 }
@@ -109,5 +109,50 @@ public class SbomProcessor {
         if (version != null) sb.append(":").append(version);
         if (purl != null) sb.append(" (").append(purl).append(")");
         return sb.toString();
+    }
+
+    /**
+     * Appends version to the key if version is available and not already present.
+     * Returns "key:version" format if version exists, otherwise returns key as-is.
+     */
+    private String appendVersionIfAvailable(String key, String version) {
+        if (version == null || version.isBlank()) {
+            return key;
+        }
+        // Check if version is already in the key (avoid duplicates)
+        if (key.contains(":")) {
+            return key;
+        }
+        return key + ":" + version;
+    }
+
+    /**
+     * Extracts version from PURL string.
+     * PURL format: pkg:type/namespace/name@version?qualifiers#subpath
+     * Returns version if found, null otherwise.
+     */
+    private String extractVersionFromPurl(String purl) {
+        if (purl == null || purl.isBlank()) {
+            return null;
+        }
+        try {
+            // Find @ symbol which precedes version
+            int atIdx = purl.indexOf('@');
+            if (atIdx < 0) {
+                return null;
+            }
+            // Version ends at ? (qualifiers) or # (subpath) or end of string
+            String afterAt = purl.substring(atIdx + 1);
+            int qIdx = afterAt.indexOf('?');
+            int hashIdx = afterAt.indexOf('#');
+            int endIdx = afterAt.length();
+            if (qIdx >= 0 && qIdx < endIdx) endIdx = qIdx;
+            if (hashIdx >= 0 && hashIdx < endIdx) endIdx = hashIdx;
+            
+            String version = afterAt.substring(0, endIdx);
+            return version.isBlank() ? null : version;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

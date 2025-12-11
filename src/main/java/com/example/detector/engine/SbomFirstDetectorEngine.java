@@ -26,6 +26,9 @@ public class SbomFirstDetectorEngine {
         this.sbomProcessor = sbomProcessor;
         this.plugins = plugins;
         log.info("SbomFirstDetectorEngine initialized with {} plugin(s)", plugins.size());
+        for (DetectorPlugin plugin : plugins) {
+            log.info("  - Registered plugin: {}", plugin.getClass().getSimpleName());
+        }
     }
 
     /**
@@ -59,53 +62,59 @@ public class SbomFirstDetectorEngine {
             boolean hasFramework = !result.frameworks.isEmpty() || !result.runtimes.isEmpty() || !result.infrastructure.isEmpty();
             log.debug("SBOM analysis result - Has language: {}, Has framework: {}", hasLanguage, hasFramework);
 
-            // 3) fallback: if missing, run file-based plugin detectors (best-effort)
-            if (!hasLanguage || !hasFramework) {
-                log.info("SBOM analysis incomplete, falling back to file-based detection");
-                // shallow walk and apply plugins
-                try (Stream<Path> stream = Files.walk(projectRoot)) {
-                    long fileCount = stream.filter(Files::isRegularFile)
-                          .limit(20000)
-                          .peek(p -> {
-                              for (DetectorPlugin plugin : plugins) {
-                                  try {
-                                      plugin.inspect(p, projectRoot, result);
-                                  } catch (Exception e) {
-                                      log.debug("Plugin {} failed for file {}: {}", plugin.getClass().getSimpleName(), p, e.getMessage());
-                                  }
-                              }
-                          })
-                          .count();
-                    log.debug("File-based detection completed - scanned {} files", fileCount);
-                } catch (Exception e) {
-                    log.error("Error during file-based detection", e);
-                }
+            // 3) Always run infrastructure detectors (e.g., Dockerfile) even if SBOM has results,
+            //    as they can detect infrastructure that may not be in SBOM
+            //    Also run file-based detection if SBOM analysis is incomplete
+            boolean shouldRunFullFileDetection = !hasLanguage || !hasFramework;
+            
+            if (shouldRunFullFileDetection) {
+                log.info("SBOM analysis incomplete, running full file-based detection");
+                // Run all plugins
+                runFileBasedDetection(projectRoot, result, plugins, false);
             } else {
-                log.info("SBOM analysis sufficient, skipping file-based detection");
+                log.info("SBOM analysis complete, but running infrastructure detection (e.g., Dockerfile)");
+                // Only run infrastructure-related detectors (Dockerfile, etc.)
+                runFileBasedDetection(projectRoot, result, plugins, true);
             }
 
         } catch (Exception e) {
             log.error("Error during SBOM-first scan, falling back to file-based detection", e);
-            // fail-safe: fallback file-scan if SBOM parse failed
-            try (Stream<Path> stream = Files.walk(projectRoot)) {
-                long fileCount = stream.filter(Files::isRegularFile).limit(20000).peek(p -> {
-                    for (DetectorPlugin plugin : plugins) {
-                        try { 
-                            plugin.inspect(p, projectRoot, result); 
-                        } catch (Exception ex) {
-                            log.debug("Plugin {} failed for file {}: {}", plugin.getClass().getSimpleName(), p, ex.getMessage());
-                        }
-                    }
-                }).count();
-                log.info("Fallback file-based detection completed - scanned {} files", fileCount);
-            } catch (Exception ex) {
-                log.error("Error during fallback file-based detection", ex);
-            }
+            // fail-safe: fallback file-scan if SBOM parse failed - run all plugins
+            runFileBasedDetection(projectRoot, result, plugins, false);
         }
 
         log.debug("Scan completed - Languages: {}, Frameworks: {}, Runtimes: {}, Infrastructure: {}", 
                  result.languages.size(), result.frameworks.size(), result.runtimes.size(), result.infrastructure.size());
         return result;
+    }
+
+    private void runFileBasedDetection(Path projectRoot, DetectionResult result, List<DetectorPlugin> plugins, boolean infrastructureOnly) {
+        try (Stream<Path> stream = Files.walk(projectRoot)) {
+            long fileCount = stream.filter(Files::isRegularFile)
+                  .limit(20000)
+                  .peek(p -> {
+                      for (DetectorPlugin plugin : plugins) {
+                          try {
+                              // If infrastructureOnly is true, only run infrastructure-related detectors
+                              if (infrastructureOnly) {
+                                  String pluginName = plugin.getClass().getSimpleName();
+                                  if (pluginName.contains("Dockerfile") || pluginName.contains("Infrastructure")) {
+                                      plugin.inspect(p, projectRoot, result);
+                                  }
+                              } else {
+                                  // Run all plugins
+                                  plugin.inspect(p, projectRoot, result);
+                              }
+                          } catch (Exception e) {
+                              log.debug("Plugin {} failed for file {}: {}", plugin.getClass().getSimpleName(), p, e.getMessage());
+                          }
+                      }
+                  })
+                  .count();
+            log.debug("File-based detection completed - scanned {} files (infrastructureOnly: {})", fileCount, infrastructureOnly);
+        } catch (Exception e) {
+            log.error("Error during file-based detection", e);
+        }
     }
 
     private Optional<Path> findSbomFile(Path root) {
