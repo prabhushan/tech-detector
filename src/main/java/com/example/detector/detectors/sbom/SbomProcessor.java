@@ -3,15 +3,15 @@ package com.example.detector.detectors.sbom;
 import com.example.detector.model.DetectionResult;
 import org.cyclonedx.model.Bom;
 import org.cyclonedx.model.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Processes a CycloneDX Bom into DetectionResult using RegistryMatcher.
+ */
 @org.springframework.stereotype.Component
 public class SbomProcessor {
-    private static final Logger log = LoggerFactory.getLogger(SbomProcessor.class);
 
     private final RegistryMatcher matcher;
 
@@ -24,90 +24,90 @@ public class SbomProcessor {
      * Adds languages, frameworks, runtimes, cloudSdks, databases, containers.
      */
     public void processBom(Bom bom, DetectionResult result) {
-        if (bom == null) {
-            log.warn("BOM is null, skipping processing");
-            return;
-        }
+        if (bom == null) return;
 
-        // Components present
         List<Component> components = bom.getComponents();
         if (components != null) {
-            log.debug("Processing {} components from BOM", components.size());
-            int processedCount = 0;
             for (Component c : components) {
-                processedCount++;
-                String name = c.getName();
-                String version = c.getVersion();
-                String purl = c.getPurl();
-                String type = c.getType() != null ? c.getType().toString() : "";
+                try {
+                    String name = c.getName();
+                    String version = c.getVersion();
+                    String purl = c.getPurl(); // may be null
+                    String type = (c.getType() != null) ? c.getType().toString() : null;
 
-                // language inference from purl
-                Optional<String> lang = matcher.inferLanguageFromPurl(purl);
-                lang.ifPresent(result.languages::add);
-
-                // framework detection
-                List<String> fwMatches = matcher.matchFrameworks(name + (version==null ? "" : ":"+version), purl);
-                for (String fw : fwMatches) {
-                    result.addFramework(fw, (name == null ? "" : name) + (version == null ? "" : ":" + version) + (purl == null ? "" : " ("+purl+")"));
-                }
-
-                // cloud SDKs
-                List<String> clouds = matcher.matchCloudSdks(name, purl);
-                for (String cName : clouds) {
-                    result.addCloudSdk(cName, (name == null ? "" : name) + (version == null ? "" : ":"+version) + (purl == null ? "" : " ("+purl+")"));
-                }
-
-                // databases
-                List<String> dbs = matcher.matchDatabases(name, purl);
-                for (String db : dbs) {
-                    result.addDatabase(db, (name == null ? "" : name) + (version == null ? "" : ":"+version));
-                }
-
-                // container components -> detect Docker/container base images
-                if (type != null && type.equalsIgnoreCase("container")) {
-                    result.addInfrastructure("container", (name == null ? "" : name) + (version == null ? "" : ":"+version));
-                }
-
-                // runtime heuristics from purl (e.g., pkg:generic/openjdk@17)
-                if (purl != null) {
-                    String lower = purl.toLowerCase();
-                    if (lower.contains("openjdk") || lower.contains("jdk") || lower.contains("temurin") || lower.contains("corretto")) {
-                        result.addRuntime("JDK", name + (version == null ? "" : ":" + version) + " (" + purl + ")");
-                    } else if (lower.startsWith("pkg:pypi/") || lower.contains("python")) {
-                        result.addRuntime("Python", name + (version == null ? "" : ":" + version));
-                    } else if (lower.startsWith("pkg:npm/") || lower.contains("node")) {
-                        result.addRuntime("Node", name + (version == null ? "" : ":" + version));
+                    // 1) Language inference from PURL (safe null handling)
+                    Optional<String> lang = Optional.empty();
+                    if (purl != null) {
+                        try {
+                            lang = matcher.inferLanguageFromPurl(purl);
+                        } catch (Exception ignored) {
+                            lang = Optional.empty();
+                        }
                     }
+                    lang.ifPresent(result.languages::add);
+
+                    // 2) Framework detection (matchFrameworks handles sbomMatch and keywords)
+                    List<String> frameworks = matcher.matchFrameworks(name == null ? "" : name, purl);
+                    for (String fw : frameworks) {
+                        String evidence = buildEvidence(name, version, purl);
+                        result.addFramework(fw, evidence);
+                    }
+
+                    // 3) Cloud SDKs
+                    List<String> clouds = matcher.matchCloudSdks(name == null ? "" : name, purl);
+                    for (String cl : clouds) {
+                        String evidence = buildEvidence(name, version, purl);
+                        result.addCloudSdk(cl, evidence);
+                    }
+
+                    // 4) Databases
+                    List<String> dbs = matcher.matchDatabases(name == null ? "" : name, purl);
+                    for (String db : dbs) {
+                        String evidence = buildEvidence(name, version, purl);
+                        result.addDatabase(db, evidence);
+                    }
+
+                    // 5) Containers (CycloneDX may mark components type=container)
+                    if ("container".equalsIgnoreCase(type)) {
+                        result.addInfrastructure("container", buildEvidence(name, version, purl));
+                    }
+
+                    // 6) Runtime heuristics from purl (simple)
+                    if (purl != null) {
+                        String plower = purl.toLowerCase();
+                        if (plower.contains("openjdk") || plower.contains("jdk") || plower.contains("temurin") || plower.contains("corretto")) {
+                            result.addRuntime("JDK", buildEvidence(name, version, purl));
+                        } else if (plower.startsWith("pkg:pypi") || plower.contains("python")) {
+                            result.addRuntime("Python", buildEvidence(name, version, purl));
+                        } else if (plower.startsWith("pkg:npm") || plower.contains("node")) {
+                            result.addRuntime("Node", buildEvidence(name, version, purl));
+                        }
+                    }
+                } catch (Exception ex) {
+                    // defensive per-component; continue
                 }
             }
-            log.debug("Processed {} components - Languages: {}, Frameworks: {}, Cloud SDKs: {}, Databases: {}", 
-                     processedCount, result.languages.size(), result.frameworks.size(), 
-                     result.cloudSdks.size(), result.databases.size());
-        } else {
-            log.debug("BOM has no components");
         }
 
-        // Tool and metadata smell: BOM metadata may include tools/runtime info
-        if (bom.getMetadata() != null) {
-            if (bom.getMetadata().getTools() != null) {
-                log.debug("Processing BOM metadata tools");
-                bom.getMetadata().getTools().forEach(tool -> {
-                    // tool.getVendor(), tool.getName() may hint at build system
-                    String t = (tool.getVendor() == null ? "" : tool.getVendor()) + " " + (tool.getName() == null ? "" : tool.getName());
-                    if (t.toLowerCase().contains("maven")) {
-                        result.languages.add("Java");
-                        log.debug("Detected Java from Maven tool in metadata");
-                    }
-                    if (t.toLowerCase().contains("gradle")) {
-                        result.languages.add("Java");
-                        log.debug("Detected Java from Gradle tool in metadata");
-                    }
-                });
-            }
+        // Metadata tools may hint at build system / language
+        if (bom.getMetadata() != null && bom.getMetadata().getTools() != null) {
+            bom.getMetadata().getTools().forEach(tool -> {
+                try {
+                    String vendor = tool.getVendor() == null ? "" : tool.getVendor();
+                    String tname = tool.getName() == null ? "" : tool.getName();
+                    String combined = (vendor + " " + tname).toLowerCase();
+                    if (combined.contains("maven") || combined.contains("gradle")) result.languages.add("Java");
+                    if (combined.contains("pip") || combined.contains("poetry")) result.languages.add("Python");
+                } catch (Exception ignored) {}
+            });
         }
-        
-        log.info("BOM processing completed - Languages: {}, Frameworks: {}, Runtimes: {}, Cloud SDKs: {}, Databases: {}, Infrastructure: {}", 
-                result.languages.size(), result.frameworks.size(), result.runtimes.size(), 
-                result.cloudSdks.size(), result.databases.size(), result.infrastructure.size());
+    }
+
+    private String buildEvidence(String name, String version, String purl) {
+        StringBuilder sb = new StringBuilder();
+        if (name != null) sb.append(name);
+        if (version != null) sb.append(":").append(version);
+        if (purl != null) sb.append(" (").append(purl).append(")");
+        return sb.toString();
     }
 }

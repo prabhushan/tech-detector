@@ -1,162 +1,193 @@
 {
   "languages": {
     "java": {
-      "extensions": [".java", ".jar", ".war"],
-      "keywords": ["public class", "import java.", "javax."],
-      "sbomMatch": ["maven", "gradle", "org.springframework", "com.fasterxml.jackson"]
+      "keywords": ["public class", "javax.", "jakarta.", "import java."],
+      "files": [".java", "pom.xml", "build.gradle", "settings.gradle"],
+      "sbomMatch": ["pkg:maven", "pkg:gradle"],
+      "match": "contains"
     },
     "python": {
-      "extensions": [".py"],
-      "files": ["requirements.txt", "pyproject.toml"],
-      "keywords": ["import ", "def ", "print("],
-      "sbomMatch": ["pypi", "pip", "cpython"]
+      "keywords": ["def ", "import ", "class "],
+      "files": [".py", "pyproject.toml", "Pipfile"],
+      "sbomMatch": ["pkg:pypi"],
+      "match": "contains"
     },
     "javascript": {
-      "extensions": [".js", ".jsx", ".mjs"],
-      "files": ["package.json"],
-      "keywords": ["require(", "import ", "export "],
-      "sbomMatch": ["npm", "node", "yarn"]
+      "keywords": ["function ", "import ", "export ", "require("],
+      "files": [".js", "package.json"],
+      "sbomMatch": ["pkg:npm"],
+      "match": "contains"
     },
     "typescript": {
-      "extensions": [".ts", ".tsx"],
-      "files": ["package.json"],
-      "sbomMatch": ["@types/", "typescript"]
+      "files": [".ts"],
+      "sbomMatch": ["pkg:npm"],
+      "match": "contains"
     },
     "go": {
-      "extensions": [".go"],
-      "files": ["go.mod", "go.sum"],
-      "sbomMatch": ["golang", "go."]
+      "files": [".go", "go.mod"],
+      "sbomMatch": ["pkg:golang"],
+      "match": "contains"
+    },
+    "csharp": {
+      "files": [".cs", ".csproj"],
+      "sbomMatch": ["pkg:nuget"],
+      "match": "contains"
     },
     "ruby": {
-      "extensions": [".rb"],
-      "files": ["Gemfile", "Gemfile.lock"],
-      "sbomMatch": ["rubygems"]
+      "files": [".rb", "Gemfile"],
+      "sbomMatch": ["pkg:gem"],
+      "match": "contains"
+    },
+    "php": {
+      "files": [".php", "composer.json"],
+      "sbomMatch": ["pkg:composer"],
+      "match": "contains"
+    },
+    "rust": {
+      "files": ["Cargo.toml", ".rs"],
+      "sbomMatch": ["pkg:cargo"],
+      "match": "contains"
     }
   },
 
   "frameworks": {
-    "spring": {
+    "spring-boot": {
       "keywords": ["@SpringBootApplication", "org.springframework"],
-      "sbomMatch": ["org.springframework.boot"]
+      "sbomMatch": ["org.springframework.boot"],
+      "match": "contains"
+    },
+    "spring-framework": {
+      "keywords": ["@SpringBootApplication", "org.springframework"],
+      "sbomMatch": ["org.springframework"],
+      "match": "exact"
+    },
+    "micronaut": {
+      "keywords": ["io.micronaut"],
+      "sbomMatch": ["io.micronaut"],
+      "match": "contains"
+    },
+    "quarkus": {
+      "keywords": ["io.quarkus"],
+      "sbomMatch": ["io.quarkus"],
+      "match": "contains"
     },
     "django": {
-      "keywords": ["django.", "from django"],
+      "keywords": ["django"],
       "files": ["manage.py"],
-      "sbomMatch": ["django"]
+      "sbomMatch": ["django"],
+      "match": "contains"
     },
     "flask": {
-      "keywords": ["from flask import"],
-      "sbomMatch": ["flask"]
-    },
-    "express": {
-      "files": ["app.js", "server.js"],
-      "keywords": ["express()"],
-      "sbomMatch": ["express"]
+      "keywords": ["flask"],
+      "sbomMatch": ["flask"],
+      "match": "contains"
     },
     "fastapi": {
-      "keywords": ["from fastapi"],
-      "sbomMatch": ["fastapi"]
-    }
-  },
-
-  "runtimes": {
-    "jre": {
-      "sbomMatch": ["temurin", "openjdk", "oraclejdk", "corretto"],
-      "dockerBaseImages": ["openjdk", "eclipse-temurin", "corretto"]
+      "keywords": ["fastapi"],
+      "sbomMatch": ["fastapi"],
+      "match": "contains"
     },
-    "python-runtime": {
-      "sbomMatch": ["cpython"],
-      "dockerBaseImages": ["python:"]
+    "node_express": {
+      "keywords": ["express()"],
+      "sbomMatch": ["express"],
+      "match": "exact"
     },
-    "node-runtime": {
-      "sbomMatch": ["nodejs"],
-      "dockerBaseImages": ["node:"]
+    "react": {
+      "files": ["package.json"],
+      "keywords": ["react"],
+      "sbomMatch": ["react"],
+      "match": "exact"
+    },
+    "angular": {
+      "files": ["angular.json"],
+      "sbomMatch": ["@angular"],
+      "match": "exact"
+    },
+    "dotnet_aspnet": {
+      "files": [".csproj"],
+      "sbomMatch": ["microsoft.aspnetcore"],
+      "match": "contains"
+    },
+    "rails": {
+      "files": ["Gemfile"],
+      "sbomMatch": ["rails"],
+      "match": "contains"
     }
   },
 
   "cloudSdks": {
     "aws": {
-      "sbomMatch": ["software.amazon", "boto3", "aws-sdk"],
-      "keywords": ["AWSAccessKey", "AmazonS3", "boto3"]
+      "keywords": ["aws.", "boto3"],
+      "sbomMatch": ["aws-java-sdk", "boto3"],
+      "match": "contains"
     },
     "azure": {
-      "sbomMatch": ["azure-core", "com.azure"],
-      "keywords": ["AzureKey", "AzureBlobClient"]
+      "keywords": ["azure"],
+      "sbomMatch": ["com.azure"],
+      "match": "contains"
     },
     "gcp": {
-      "sbomMatch": ["google-cloud", "gcp"],
-      "keywords": ["GoogleCredentials", "google.cloud"]
+      "keywords": ["google.cloud"],
+      "sbomMatch": ["com.google.cloud"],
+      "match": "contains"
     }
   },
 
   "databases": {
+    "mysql": {
+      "sbomMatch": ["mysql-connector", "mariadb"],
+      "keywords": ["mysql"],
+      "match": "contains"
+    },
     "postgres": {
       "sbomMatch": ["postgresql", "org.postgresql"],
-      "keywords": ["jdbc:postgresql://", "psql"]
-    },
-    "mysql": {
-      "sbomMatch": ["mysql:mysql"],
-      "keywords": ["jdbc:mysql://"]
+      "keywords": ["postgres"],
+      "match": "contains"
     },
     "mongodb": {
-      "sbomMatch": ["mongodb", "mongo-java-driver"],
-      "keywords": ["mongodb://"]
+      "sbomMatch": ["mongodb-driver"],
+      "keywords": ["mongodb"],
+      "match": "contains"
     },
     "redis": {
-      "sbomMatch": ["redis", "lettuce", "jedis"],
-      "keywords": ["redis://"]
+      "sbomMatch": ["jedis", "redis"],
+      "keywords": ["redis"],
+      "match": "contains"
     }
   },
 
   "containers": {
     "docker": {
-      "files": ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"],
-      "sbomMatch": [],
-      "keywords": ["FROM ", "RUN ", "CMD ", "ENTRYPOINT"]
+      "files": ["Dockerfile"],
+      "keywords": ["FROM "],
+      "match": "contains"
     },
-    "kubernetes": {
-      "files": ["deployment.yaml", "deployment.yml", "k8s.yml"],
-      "keywords": ["apiVersion", "kind:", "metadata:"]
+    "oci_image": {
+      "sbomMatch": ["oci:"],
+      "match": "contains"
     }
   },
 
-  "buildTools": {
-    "maven": {
-      "files": ["pom.xml"],
-      "sbomMatch": ["maven"],
-      "keywords": ["<project>", "<dependencies>"]
+  "iac": {
+    "terraform": {
+      "files": [".tf"],
+      "keywords": ["terraform"],
+      "match": "contains"
     },
-    "gradle": {
-      "files": ["build.gradle", "build.gradle.kts"],
-      "sbomMatch": ["gradle"],
-      "keywords": ["plugins {", "dependencies {"]
+    "cloudformation": {
+      "files": [".yaml", ".yml"],
+      "keywords": ["AWSTemplateFormatVersion"],
+      "match": "contains"
     },
-    "pip": {
-      "files": ["requirements.txt"],
-      "sbomMatch": ["pypi"]
+    "ansible": {
+      "files": ["ansible.cfg"],
+      "keywords": ["hosts:", "tasks:"],
+      "match": "contains"
     },
-    "npm": {
-      "files": ["package.json"],
-      "sbomMatch": ["npm"]
-    },
-    "go-mod": {
-      "files": ["go.mod"],
-      "sbomMatch": ["gomod"]
-    }
-  },
-
-  "osDistros": {
-    "alpine": {
-      "dockerBaseImages": ["alpine"],
-      "keywords": ["apk add"]
-    },
-    "ubuntu": {
-      "dockerBaseImages": ["ubuntu"],
-      "keywords": ["apt-get", "apt install"]
-    },
-    "redhat": {
-      "dockerBaseImages": ["redhat", "ubi"],
-      "keywords": ["yum install", "dnf install"]
+    "pulumi": {
+      "files": ["Pulumi.yaml"],
+      "keywords": ["pulumi"],
+      "match": "contains"
     }
   }
 }

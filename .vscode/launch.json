@@ -18,7 +18,9 @@
             "projectName": "tech-detector",
             "args": [
                 "/Users/prabhu/technology/neospark/neotrak_combined/neotrak-api"
-            ]
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }

@@ -1,16 +1,14 @@
 package com.example.detector.engine;
 
 import com.example.detector.model.DetectionResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 
+@Slf4j
 @Service
 public class DetectorService {
-    private static final Logger log = LoggerFactory.getLogger(DetectorService.class);
-    
     private final SbomFirstDetectorEngine engine;
 
     public DetectorService(SbomFirstDetectorEngine engine) { 

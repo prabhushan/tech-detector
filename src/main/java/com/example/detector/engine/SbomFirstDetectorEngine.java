@@ -4,9 +4,8 @@ import com.example.detector.model.DetectionResult;
 import com.example.detector.detectors.sbom.SbomProcessor;
 import com.example.detector.detectors.sbom.SbomService;
 import com.example.detector.spi.DetectorPlugin;
+import lombok.extern.slf4j.Slf4j;
 import org.cyclonedx.model.Bom;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
@@ -15,10 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Slf4j
 @Component
 public class SbomFirstDetectorEngine {
-    private static final Logger log = LoggerFactory.getLogger(SbomFirstDetectorEngine.class);
-
     private final SbomService sbomService;
     private final SbomProcessor sbomProcessor;
     private final List<DetectorPlugin> plugins;
@@ -115,8 +113,7 @@ public class SbomFirstDetectorEngine {
             Optional<Path> found = s.filter(Files::isRegularFile)
                     .filter(p -> {
                         String n = p.getFileName().toString().toLowerCase();
-                        return n.equals("bom.xml") ||
-                               n.startsWith("cyclonedx") && (n.endsWith(".json") || n.endsWith(".xml")) ||
+                        return n.startsWith("cyclonedx") && n.endsWith(".json") ||
                                n.equals("sbom.json") ||
                                n.equals("cyclonedx.json");
                     }).findFirst();

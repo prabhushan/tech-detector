@@ -2,6 +2,7 @@ package com.example.detector.detectors.runtime;
 
 import com.example.detector.model.DetectionResult;
 import com.example.detector.spi.DetectorPlugin;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -10,6 +11,7 @@ import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Component
 public class DockerfileRuntimeDetector implements DetectorPlugin {
     private static final Pattern FROM = Pattern.compile("^FROM\\s+([^\\s]+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
@@ -17,7 +19,9 @@ public class DockerfileRuntimeDetector implements DetectorPlugin {
     @Override
     public void inspect(Path file, Path projectRoot, DetectionResult result) {
         String name = file.getFileName().toString().toLowerCase();
-        if (!name.equals("dockerfile") && !file.getFileName().toString().toLowerCase().startsWith("dockerfile")) return;
+        if (!name.startsWith("dockerfile")) return;
+        
+        log.debug("Processing Dockerfile: {}", file);
         try {
             String txt = Files.readString(file, StandardCharsets.UTF_8);
             Matcher m = FROM.matcher(txt);
@@ -32,9 +36,10 @@ public class DockerfileRuntimeDetector implements DetectorPlugin {
                     result.addRuntime("Node", "Docker base: " + base);
                 }
                 result.addInfrastructure("Docker", file.toString());
+                log.debug("Detected Docker infrastructure and runtime from: {}", file);
             }
         } catch (Exception e) {
-            // ignore
+            log.debug("Error processing Dockerfile {}: {}", file, e.getMessage());
         }
     }
 }
