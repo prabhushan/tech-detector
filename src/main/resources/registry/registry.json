@@ -52,12 +52,10 @@
 
   "frameworks": {
     "spring-boot": {
-      "keywords": ["@SpringBootApplication", "org.springframework"],
       "sbomMatch": ["org.springframework.boot"],
-      "match": "contains"
+      "match": "exact"
     },
     "spring-framework": {
-      "keywords": ["@SpringBootApplication", "org.springframework"],
       "sbomMatch": ["org.springframework"],
       "match": "exact"
     },
@@ -96,7 +94,8 @@
       "files": ["package.json"],
       "keywords": ["react"],
       "sbomMatch": ["react"],
-      "match": "exact"
+      "match": "exact",
+      "purlMatch": "name"
     },
     "angular": {
       "files": ["angular.json"],
@@ -111,6 +110,42 @@
     "rails": {
       "files": ["Gemfile"],
       "sbomMatch": ["rails"],
+      "match": "contains"
+    },
+    "langchain": {
+      "keywords": ["from langchain", "import langchain"],
+      "sbomMatch": ["langchain"],
+      "match": "exact",
+      "purlMatch": "name"
+    },
+    "langgraph": {
+      "keywords": ["langgraph"],
+      "sbomMatch": ["langgraph"],
+      "match": "contains"
+    },
+    "transformers": {
+      "keywords": ["from transformers", "import transformers"],
+      "sbomMatch": ["transformers"],
+      "match": "contains"
+    },
+    "huggingface_hub": {
+      "keywords": ["from huggingface_hub", "import huggingface_hub"],
+      "sbomMatch": ["huggingface_hub", "huggingface"],
+      "match": "contains"
+    },
+    "openai": {
+      "keywords": ["import openai", "from openai"],
+      "sbomMatch": ["openai"],
+      "match": "contains"
+    },
+    "llama": {
+      "keywords": ["llama", "llama.cpp", "pyllama"],
+      "sbomMatch": ["llama"],
+      "match": "contains"
+    },
+    "sentence-transformers": {
+      "keywords": ["from sentence_transformers", "sentence-transformers"],
+      "sbomMatch": ["sentence-transformers"],
       "match": "contains"
     }
   },
@@ -152,6 +187,74 @@
     "redis": {
       "sbomMatch": ["jedis", "redis"],
       "keywords": ["redis"],
+      "match": "contains"
+    }
+  },
+
+  "vectorDatabases": {
+    "pinecone": {
+      "keywords": ["import pinecone", "from pinecone", "pinecone.init", "pinecone_client"],
+      "sbomMatch": ["pinecone-client"],
+      "match": "contains"
+    },
+    "weaviate": {
+      "keywords": ["import weaviate", "from weaviate", "weaviate.Client"],
+      "sbomMatch": ["weaviate-client"],
+      "match": "contains"
+    },
+    "qdrant": {
+      "keywords": ["import qdrant_client", "from qdrant_client", "QdrantClient"],
+      "sbomMatch": ["qdrant-client"],
+      "match": "contains"
+    },
+    "milvus": {
+      "keywords": ["import pymilvus", "from pymilvus", "Milvus", "connections.connect"],
+      "sbomMatch": ["pymilvus", "milvus"],
+      "match": "contains"
+    },
+    "chroma": {
+      "keywords": ["import chromadb", "from chromadb", "chromadb.Client", "chromadb.PersistentClient"],
+      "sbomMatch": ["chromadb"],
+      "match": "contains"
+    },
+    "faiss": {
+      "keywords": ["import faiss", "from faiss", "faiss.Index"],
+      "sbomMatch": ["faiss-cpu", "faiss-gpu"],
+      "match": "contains"
+    },
+    "vespa": {
+      "keywords": ["import vespa", "from vespa", "Vespa"],
+      "sbomMatch": ["pyvespa", "vespa"],
+      "match": "contains"
+    },
+    "pgvector": {
+      "keywords": ["pgvector", "vector", "CREATE EXTENSION vector"],
+      "sbomMatch": ["pgvector"],
+      "match": "contains"
+    },
+    "redis-vector": {
+      "keywords": ["redis", "REDIS_OM", "VectorStore", "vector_index"],
+      "sbomMatch": ["redis", "redis-om"],
+      "match": "contains"
+    },
+    "elasticsearch-vector": {
+      "keywords": ["from elasticsearch", "dense_vector", "knn", "vector_search"],
+      "sbomMatch": ["elasticsearch", "opensearch"],
+      "match": "contains"
+    },
+    "lancedb": {
+      "keywords": ["import lancedb", "from lancedb", "lancedb.connect"],
+      "sbomMatch": ["lancedb"],
+      "match": "contains"
+    },
+    "typesense": {
+      "keywords": ["import typesense", "from typesense", "Client"],
+      "sbomMatch": ["typesense"],
+      "match": "contains"
+    },
+    "zilliz": {
+      "keywords": ["import zilliz", "Zilliz"],
+      "sbomMatch": ["zilliz"],
       "match": "contains"
     }
   },

@@ -4,6 +4,8 @@ import com.example.detector.config.RegistryLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,6 +71,30 @@ public class RegistryMatcher {
             if (node == null || node.isMissingNode()) continue;
 
             String defaultMatch = node.path("match").asText("contains").toLowerCase(Locale.ROOT);
+            String purlMatchSetting = node.path("purlMatch").asText("namespace").toLowerCase(Locale.ROOT);
+            if (purlMatchSetting.isBlank()) {
+                purlMatchSetting = "namespace";
+            }
+
+            // Early check: if purlMatch="name" and package has namespace, skip this entry entirely
+            // to avoid false positives from scoped packages (e.g., don't match "react" in "@testing-library/react")
+            if ("name".equals(purlMatchSetting) && purl != null) {
+                PurlParts parts = parsePurl(purl);
+                if (parts != null && parts.namespace != null) {
+                    try {
+                        String decodedNamespace = URLDecoder.decode(parts.namespace, StandardCharsets.UTF_8);
+                        if (decodedNamespace != null && !decodedNamespace.isBlank()) {
+                            // This is a scoped package, skip matching when purlMatch="name"
+                            continue;
+                        }
+                    } catch (Exception ex) {
+                        // If decoding fails, check if namespace is non-empty
+                        if (!parts.namespace.isBlank()) {
+                            continue;
+                        }
+                    }
+                }
+            }
 
             boolean matched = false;
 
@@ -92,7 +118,21 @@ public class RegistryMatcher {
             if (sboms.isArray()) {
                 for (JsonNode s : sboms) {
                     if (s.isTextual()) {
-                        if (applyMatch(hay, s.asText(), defaultMatch, purl)) {
+                        String pattern = s.asText();
+                        // When purlMatch is specified, use name/namespace matching from PURL
+                        // This allows precise control over matching scoped vs non-scoped packages
+                        if (purl != null) {
+                            if (matchesNameOrNamespace(pattern, purl, defaultMatch, purlMatchSetting)) {
+                                out.add(key);
+                                matched = true;
+                                break;
+                            }
+                            // If purlMatch is specified, skip standard matching to avoid false positives
+                            // (e.g., avoid matching "react" in "@testing-library/react" when purlMatch="name")
+                            continue;
+                        }
+                        // Fall back to standard matching only if no PURL is available
+                        if (applyMatch(hay, pattern, defaultMatch, purl)) {
                             out.add(key);
                             matched = true;
                             break;
@@ -151,6 +191,91 @@ public class RegistryMatcher {
             case "contains":
             default:
                 return hayLower.contains(patternLower);
+        }
+    }
+
+    /**
+     * Checks if pattern matches the name or namespace from PURL.
+     * Respects the match type (contains, exact, regex) and purlMatch setting (name, namespace, both).
+     * 
+     * @param pattern The pattern to match
+     * @param purl The PURL string to extract name/namespace from
+     * @param matchType The match type: "contains", "exact", or "regex"
+     * @param purlMatchSetting Which PURL component to match: "name", "namespace", or "both"
+     */
+    private boolean matchesNameOrNamespace(String pattern, String purl, String matchType, String purlMatchSetting) {
+        if (pattern == null || pattern.isBlank() || purl == null || purl.isBlank()) {
+            return false;
+        }
+
+        PurlParts parts = parsePurl(purl);
+        if (parts == null) return false;
+
+        String patternLower = pattern.toLowerCase(Locale.ROOT);
+        matchType = (matchType == null) ? "contains" : matchType.toLowerCase(Locale.ROOT);
+        purlMatchSetting = (purlMatchSetting == null || purlMatchSetting.isBlank()) 
+            ? "namespace" 
+            : purlMatchSetting.toLowerCase(Locale.ROOT);
+
+        boolean checkNamespace = "both".equals(purlMatchSetting) || "namespace".equals(purlMatchSetting);
+        boolean checkName = "both".equals(purlMatchSetting) || "name".equals(purlMatchSetting);
+
+        // Decode URL-encoded namespace (e.g., %40 -> @)
+        String decodedNamespace = null;
+        if (parts.namespace != null) {
+            try {
+                decodedNamespace = URLDecoder.decode(parts.namespace, StandardCharsets.UTF_8);
+            } catch (Exception ex) {
+                decodedNamespace = parts.namespace;
+            }
+        }
+
+        // Check namespace match if enabled
+        if (checkNamespace && decodedNamespace != null) {
+            String nsLower = decodedNamespace.toLowerCase(Locale.ROOT);
+            if (matchesPattern(patternLower, nsLower, matchType, pattern)) {
+                return true;
+            }
+        }
+
+        // Check name match if enabled
+        if (checkName && parts.name != null) {
+            // When purlMatch is "name", only match if there's no namespace (not a scoped package)
+            if ("name".equals(purlMatchSetting)) {
+                // For name-only matching, exclude scoped packages (packages with namespace)
+                if (decodedNamespace != null && !decodedNamespace.isBlank()) {
+                    return false;
+                }
+            }
+            // Check name match
+            String nameLower = parts.name.toLowerCase(Locale.ROOT);
+            if (matchesPattern(patternLower, nameLower, matchType, pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper to match pattern against a target string based on match type.
+     */
+    private boolean matchesPattern(String patternLower, String targetLower, String matchType, String rawPattern) {
+        switch (matchType) {
+            case "exact":
+                return patternLower.equals(targetLower);
+            case "regex":
+                try {
+                    Pattern p = Pattern.compile(rawPattern, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+                    Matcher m = p.matcher(targetLower);
+                    return m.find();
+                } catch (Exception ex) {
+                    // malformed regex => fallback to contains
+                    return targetLower.contains(patternLower);
+                }
+            case "contains":
+            default:
+                return targetLower.contains(patternLower);
         }
     }
 

@@ -1,0 +1,779 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.6",
+    "serialNumber": "urn:uuid:0f1f3c51-80db-43c2-a1b8-7372a7fc75cd",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2025-12-12T03:30:19Z",
+        "tools": {
+            "components": [
+                {
+                    "group": "@cyclonedx",
+                    "name": "cdxgen",
+                    "version": "11.2.7",
+                    "purl": "pkg:npm/%40cyclonedx/cdxgen@11.2.7",
+                    "type": "application",
+                    "bom-ref": "pkg:npm/@cyclonedx/cdxgen@11.2.7",
+                    "publisher": "OWASP Foundation",
+                    "authors": [
+                        {
+                            "name": "OWASP Foundation"
+                        }
+                    ]
+                }
+            ]
+        },
+        "authors": [
+            {
+                "name": "OWASP Foundation"
+            }
+        ],
+        "lifecycles": [
+            {
+                "phase": "build"
+            }
+        ],
+        "component": {
+            "group": "",
+            "name": "4da5dff2-be47-4661-8dad-1f299e784f7d",
+            "version": "latest",
+            "type": "application",
+            "bom-ref": "pkg:pypi/4da5dff2-be47-4661-8dad-1f299e784f7d@latest",
+            "purl": "pkg:pypi/4da5dff2-be47-4661-8dad-1f299e784f7d@latest"
+        },
+        "properties": [
+            {
+                "name": "cdx:bom:componentTypes",
+                "value": "pypi"
+            },
+            {
+                "name": "cdx:bom:componentSrcFiles",
+                "value": "Version specifiers: <2.0.0"
+            }
+        ]
+    },
+    "components": [
+        {
+            "group": "",
+            "name": "langchain",
+            "version": "0.1.0",
+            "description": "Building applications with LLMs through composability",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "8652e74b039333a55c79faff4400b077ba1bd0ddce5255574e42d301c05c1733"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT",
+                        "url": "https://opensource.org/licenses/MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/langchain@0.1.0",
+            "type": "framework",
+            "bom-ref": "pkg:pypi/langchain@0.1.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.1.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "1.1.3"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "langchain"
+                }
+            ],
+            "tags": [
+                "framework",
+                "ml"
+            ]
+        },
+        {
+            "group": "",
+            "name": "langchain-community",
+            "version": "0.0.20",
+            "description": "Community contributed LangChain integrations.",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "bd112b5813702919c50f89b1afa2b63adf1da89999df4842b327ee11220f8c39"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT",
+                        "url": "https://opensource.org/licenses/MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/langchain-community@0.0.20",
+            "type": "framework",
+            "bom-ref": "pkg:pypi/langchain-community@0.0.20",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.0.20"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "0.4.1"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "langchain-community"
+                }
+            ],
+            "tags": [
+                "framework",
+                "ml"
+            ]
+        },
+        {
+            "group": "",
+            "name": "langchain-core",
+            "version": "0.1.0",
+            "description": "Building applications with LLMs through composability",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "6b155a175e1f1555860b22333c14161c652b0013e229e7b8a083639c821312a8"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT",
+                        "url": "https://opensource.org/licenses/MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/langchain-core@0.1.0",
+            "type": "framework",
+            "bom-ref": "pkg:pypi/langchain-core@0.1.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.1.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "1.1.3"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "langchain-core"
+                }
+            ],
+            "tags": [
+                "framework",
+                "ml"
+            ]
+        },
+        {
+            "group": "",
+            "name": "langchain-openai",
+            "version": "0.0.5",
+            "description": "An integration package connecting OpenAI and LangChain",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "93b37dfac274adad65e46d5d6e71411e00c6984bcc5e10f1d6bb58e7944dc01b"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT",
+                        "url": "https://opensource.org/licenses/MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/langchain-openai@0.0.5",
+            "type": "framework",
+            "bom-ref": "pkg:pypi/langchain-openai@0.0.5",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.0.5"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "1.1.2"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "langchain-openai"
+                }
+            ],
+            "tags": [
+                "framework",
+                "ml"
+            ]
+        },
+        {
+            "group": "",
+            "name": "langchain-text-splitters",
+            "version": "0.0.1",
+            "description": "LangChain text splitting utilities",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "f5b802f873f5ff6a8b9259ff34d53ed989666ef4e1582e6d1adb3b5520e3839a"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT",
+                        "url": "https://opensource.org/licenses/MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/langchain-text-splitters@0.0.1",
+            "type": "framework",
+            "bom-ref": "pkg:pypi/langchain-text-splitters@0.0.1",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.0.1"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "1.0.0"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "langchain-text-splitters"
+                }
+            ],
+            "tags": [
+                "framework",
+                "ml"
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "OpenAI <support@openai.com>"
+                }
+            ],
+            "group": "",
+            "name": "openai",
+            "version": "1.0.0",
+            "description": "The official Python library for the openai API",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "e9220abf3f0332ddfcbcef3e13f70e71459618637d2e7e87b82241aaca1147f4"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0",
+                        "url": "https://opensource.org/licenses/Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/openai@1.0.0",
+            "type": "library",
+            "bom-ref": "pkg:pypi/openai@1.0.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=1.0.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "2.11.0"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "openai"
+                }
+            ],
+            "tags": [
+                "ml"
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Saurabh Kumar <me+github@saurabh-kumar.com>"
+                }
+            ],
+            "group": "",
+            "name": "python-dotenv",
+            "version": "1.0.0",
+            "description": "Read key-value pairs from a .env file and set them as environment variables",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "f5971a9226b701070a4bf2c38c89e5a3f0d64de8debda981d1db98583009122a"
+                }
+            ],
+            "licenses": [],
+            "purl": "pkg:pypi/python-dotenv@1.0.0",
+            "type": "library",
+            "bom-ref": "pkg:pypi/python-dotenv@1.0.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=1.0.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "1.2.1"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "python-dotenv"
+                }
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Samuel Colvin <s@muelcolvin.com>"
+                },
+                {
+                    "name": " Eric Jolibois <em.jolibois@gmail.com>"
+                },
+                {
+                    "name": " Hasan Ramezani <hasan.r67@gmail.com>"
+                },
+                {
+                    "name": " Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>"
+                },
+                {
+                    "name": " Terrence Dorsey <terry@pydantic.dev>"
+                },
+                {
+                    "name": " David Montague <david@pydantic.dev>"
+                },
+                {
+                    "name": " Serge Matveenko <lig@countzero.co>"
+                },
+                {
+                    "name": " Marcelo Trylesinski <marcelotryle@gmail.com>"
+                },
+                {
+                    "name": " Sydney Runkle <sydneymarierunkle@gmail.com>"
+                },
+                {
+                    "name": " David Hewitt <mail@davidhewitt.io>"
+                },
+                {
+                    "name": " Alex Hall <alex.mojaki@gmail.com>"
+                },
+                {
+                    "name": " Victorien Plot <contact@vctrn.dev>"
+                },
+                {
+                    "name": " Douwe Maan <hi@douwe.me>"
+                }
+            ],
+            "group": "",
+            "name": "pydantic",
+            "version": "2.0.0",
+            "description": "Data validation using Python type hints",
+            "licenses": [],
+            "purl": "pkg:pypi/pydantic@2.0.0",
+            "type": "library",
+            "bom-ref": "pkg:pypi/pydantic@2.0.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=2.0.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "2.12.5"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "pydantic"
+                }
+            ],
+            "tags": [
+                "validation"
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Shantanu Jain <shantanu@openai.com>"
+                }
+            ],
+            "group": "",
+            "name": "tiktoken",
+            "version": "0.5.0",
+            "description": "tiktoken is a fast BPE tokeniser for use with OpenAI's models",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "6eaf6b593f09e321446e0940d5bc72960687b2d1889c0431d42718d437bb3285"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT",
+                        "url": "https://opensource.org/licenses/MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/tiktoken@0.5.0",
+            "type": "library",
+            "bom-ref": "pkg:pypi/tiktoken@0.5.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.5.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "0.12.0"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "tiktoken"
+                }
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>"
+                }
+            ],
+            "group": "",
+            "name": "fastapi",
+            "version": "0.104.0",
+            "description": "FastAPI framework, high performance, easy to learn, fast to code, ready for production",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "456482c1178fb7beb2814b88e1885bc49f9a81f079665016feffe3e1c6a7663e"
+                }
+            ],
+            "licenses": [],
+            "purl": "pkg:pypi/fastapi@0.104.0",
+            "type": "framework",
+            "bom-ref": "pkg:pypi/fastapi@0.104.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.104.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "0.124.2"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "fastapi"
+                }
+            ],
+            "tags": [
+                "framework"
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Tom Christie <tom@tomchristie.com>"
+                }
+            ],
+            "group": "",
+            "name": "uvicorn",
+            "version": "0.24.0",
+            "description": "The lightning-fast ASGI server.",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "3d19f13dfd2c2af1bfe34dd0f7155118ce689425fdf931177abe832ca44b8a04"
+                }
+            ],
+            "licenses": [],
+            "purl": "pkg:pypi/uvicorn@0.24.0",
+            "type": "library",
+            "bom-ref": "pkg:pypi/uvicorn@0.24.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.24.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "0.38.0"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "uvicorn[standard]"
+                }
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Andrew Dunham <andrew@du.nham.ca>"
+                },
+                {
+                    "name": " Marcelo Trylesinski <marcelotryle@gmail.com>"
+                }
+            ],
+            "group": "",
+            "name": "python-multipart",
+            "version": "0.0.6",
+            "description": "A streaming multipart parser for Python",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "ee698bab5ef148b0a760751c261902cd096e57e10558e11aca17646b74ee1c18"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0",
+                        "url": "https://opensource.org/licenses/Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/python-multipart@0.0.6",
+            "type": "library",
+            "bom-ref": "pkg:pypi/python-multipart@0.0.6",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.0.6"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "0.0.20"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "python-multipart"
+                }
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Kota Yamaguchi <yamaguchi_kota@cyberagent.co.jp>"
+                }
+            ],
+            "group": "",
+            "name": "faiss-cpu",
+            "version": "1.7.4",
+            "description": "A library for efficient similarity search and clustering of dense vectors.",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "50d4ebe7f1869483751c558558504f818980292a9b55be36f9a1ee1009d9a686"
+                }
+            ],
+            "licenses": [],
+            "purl": "pkg:pypi/faiss-cpu@1.7.4",
+            "type": "library",
+            "bom-ref": "pkg:pypi/faiss-cpu@1.7.4",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=1.7.4"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "1.13.1"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "faiss-cpu"
+                }
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Kenneth Reitz <me@kennethreitz.org>"
+                }
+            ],
+            "group": "",
+            "name": "requests",
+            "version": "2.31.0",
+            "description": "Python HTTP for Humans.",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0",
+                        "url": "https://opensource.org/licenses/Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/requests@2.31.0",
+            "externalReferences": [
+                {
+                    "type": "website",
+                    "url": "https://requests.readthedocs.io"
+                }
+            ],
+            "type": "library",
+            "bom-ref": "pkg:pypi/requests@2.31.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=2.31.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "2.32.5"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "requests"
+                }
+            ]
+        },
+        {
+            "authors": [
+                {
+                    "name": "Andrey Petrov <andrey.petrov@shazow.net>"
+                }
+            ],
+            "group": "",
+            "name": "urllib3",
+            "version": "1.26.20",
+            "description": "HTTP library with thread-safe connection pooling, file post, and more.",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "0ed14ccfbf1c30a9072c7ca157e4319b70d65f623e91e7b32fadb2853431016e"
+                }
+            ],
+            "licenses": [],
+            "purl": "pkg:pypi/urllib3@1.26.20",
+            "type": "library",
+            "bom-ref": "pkg:pypi/urllib3@1.26.20",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": "<2.0.0"
+                }
+            ],
+            "evidence": {
+                "identity": [
+                    {
+                        "field": "version",
+                        "confidence": 0.6,
+                        "methods": [
+                            {
+                                "technique": "manifest-analysis",
+                                "confidence": 0.6,
+                                "value": "Version specifiers: <2.0.0"
+                            }
+                        ],
+                        "concludedValue": "Version specifiers: <2.0.0"
+                    }
+                ]
+            }
+        },
+        {
+            "authors": [
+                {
+                    "name": "Unstructured Technologies <devops@unstructuredai.io>"
+                }
+            ],
+            "group": "",
+            "name": "unstructured",
+            "version": "0.10.0",
+            "description": "A library that prepares raw documents for downstream ML tasks.",
+            "hashes": [
+                {
+                    "alg": "SHA-256",
+                    "content": "7cd5d1223533abf511f1b476669bca56b7d17c850a7cb117068259d5b94e913e"
+                }
+            ],
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0",
+                        "url": "https://opensource.org/licenses/Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:pypi/unstructured@0.10.0",
+            "externalReferences": [
+                {
+                    "type": "vcs",
+                    "url": "https://github.com/Unstructured-IO/unstructured"
+                }
+            ],
+            "type": "library",
+            "bom-ref": "pkg:pypi/unstructured@0.10.0",
+            "properties": [
+                {
+                    "name": "cdx:pypi:versionSpecifiers",
+                    "value": ">=0.10.0"
+                },
+                {
+                    "name": "cdx:pypi:latest_version",
+                    "value": "0.18.21"
+                },
+                {
+                    "name": "cdx:pypi:resolved_from",
+                    "value": "unstructured"
+                }
+            ],
+            "tags": [
+                "ml"
+            ]
+        }
+    ],
+    "dependencies": [
+        {
+            "ref": "pkg:pypi/4da5dff2-be47-4661-8dad-1f299e784f7d@latest",
+            "dependsOn": []
+        }
+    ],
+    "annotations": [
+        {
+            "bom-ref": "metadata-annotations",
+            "subjects": [
+                "pkg:pypi/4da5dff2-be47-4661-8dad-1f299e784f7d@latest"
+            ],
+            "annotator": {
+                "component": {
+                    "group": "@cyclonedx",
+                    "name": "cdxgen",
+                    "version": "11.2.7",
+                    "purl": "pkg:npm/%40cyclonedx/cdxgen@11.2.7",
+                    "type": "application",
+                    "bom-ref": "pkg:npm/@cyclonedx/cdxgen@11.2.7",
+                    "publisher": "OWASP Foundation",
+                    "authors": [
+                        {
+                            "name": "OWASP Foundation"
+                        }
+                    ]
+                }
+            },
+            "timestamp": "2025-12-12T03:30:19Z",
+            "text": "This Software Bill-of-Materials (SBOM) document was created on Friday, December 12, 2025 with cdxgen. The data was captured during the build lifecycle phase. The document describes an application named '4da5dff2-be47-4661-8dad-1f299e784f7d'. There are 16 components."
+        }
+    ]
+}
